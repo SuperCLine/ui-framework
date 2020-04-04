@@ -23,7 +23,7 @@ namespace CAE.Core
     using System;
     using System.IO;
     using System.Collections.Generic;
-    //垃圾回收后面加
+
     public sealed class LuaMgr
     {
         private LuaEnv mLuaState = null;
