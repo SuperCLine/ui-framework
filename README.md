@@ -7,6 +7,7 @@ ui-framework is designed to automatically register events according to UI naming
 The purpose of this project is to facilitate the implementation of independent games for customers who purchase 
 [CLine Action Editor](https://assetstore.unity.com/packages/templates/systems/cline-action-editor-2-163343 "CLine Action Editor 2"). If you like this project, pls support me to buy that cool skill editor!
 
+Contact [SuperCLine](https://supercline.com) - https://supercline.com
 
 # using
 
