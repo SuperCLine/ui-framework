@@ -1,11 +1,9 @@
 local PanelLogin = supercline.class("PanelLogin", supercline.PanelBase)
 
-function PanelLogin.Prefab()
-    return "/Prefabs/UI/PanelLogin.prefab"
-end
+supercline.Prefab.PanelLogin = "/Prefabs/UI/PanelLogin.prefab"
 
 function PanelLogin:Ctor(transform, gameObject)
-    
+
 end
 
 function PanelLogin:OnOpen(controls)

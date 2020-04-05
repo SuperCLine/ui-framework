@@ -194,8 +194,7 @@ function PanelMgr:OnDragEnd(panelName, panelItem, go, eventData)
 end
 
 function PanelMgr:Main()
-    -- supercline.cPanelMgr.Open(supercline.PanelLogin.Prefab())
-    supercline.cPanelMgr:Open("/Prefabs/UI/PanelLogin.prefab")
+    supercline.cPanelMgr:Open(supercline.Prefab.PanelLogin)
 end
 
 return PanelMgr
