@@ -104,20 +104,20 @@ namespace CAE.Core
             }
         }
 
-        public void AddPanelItem(string panelOwner, string prefabPath, RectTransform parent)
-        {
-            // TO CLine: to support grid view item.
-        }
+
 
         private PanelBase CreatePanel(string prefabPath)
         {
             GameObject go = GameObject.Instantiate(ResourceMgr.Instance.LoadGameObject(prefabPath));
             PanelBase panel = go.GetComponent<PanelBase>();
+            panel.Prefab = prefabPath;
             panel.BuildControl();
             Transform parent = GetLayer(panel.PanelLayer);
             RectTransform rect = go.transform as RectTransform;
             AddUIChild(rect, parent as RectTransform);
             rect.SetAsLastSibling();
+
+            panel.OnCreate();
 
             mPanelHash.Add(prefabPath, panel);
 
@@ -175,7 +175,7 @@ namespace CAE.Core
             return siblingIndex;
         }
 
-        private void AddUIChild(RectTransform child, RectTransform parent)
+        public static void AddUIChild(RectTransform child, RectTransform parent)
         {
             Vector3 localScale = child.localScale;
             Vector3 localPosition = child.anchoredPosition3D;

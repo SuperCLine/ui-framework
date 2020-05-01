@@ -1,200 +1,161 @@
+local cPanelMgr = CS.CAE.Core.PanelMgr.Instance
 local PanelMgr = supercline.class("PanelMgr")
 
 function PanelMgr:Ctor()
-    
+
     self.panels = {}
 end
 
-function PanelMgr:AwakePanel(panelName, transform, gameObject)
-    
-    assert(not self.panels[panelName], "duplicate panel: "..panelName)
+function PanelMgr:Open(prefabPath, show)
+    if self.panels[prefabPath] then
+        print(string.format("PanelMgr:Open//%s is exist.", prefabPath))
+        return
+    end
+
+    self.panels[prefabPath] = {}
+
+    cPanelMgr:Open(prefabPath, show)
+end
+
+function PanelMgr:Close(prefabPath)
+    if not self.panels[prefabPath] then
+        print(string.format("PanelMgr:Close//%s not exist.", prefabPath))
+        return
+    end
+
+    cPanelMgr:Close(prefabPath)
+
+    self.panels[prefabPath] = nil
+end
+
+function PanelMgr:Show(prefabPath)
+    if not self.panels[prefabPath] then
+        print(string.format("PanelMgr:Show//%s not exist.", prefabPath))
+        return
+    end
+
+    cPanelMgr:Show(prefabPath)
+end
+
+function PanelMgr:Hide(prefabPath)
+    if not self.panels[prefabPath] then
+        print(string.format("PanelMgr:Hide//%s not exist.", prefabPath))
+        return
+    end
+
+    cPanelMgr:Hide(prefabPath)
+end
+
+function PanelMgr:GetPanel(prefabPath)
+    if not self.panels[prefabPath] then
+        print(string.format("PanelMgr:GetPanel//%s not exist.", prefabPath))
+        return
+    end
+
+    return self.panels[prefabPath].Instance
+end
+
+
+-- lua interface
+function PanelMgr:NewPanel(panelName, prefabPath, transform, gameObject)
+
+    assert(supercline.classes[panelName], "unknown panel class: "..panelName)
 
     local cls = supercline.classes[panelName]
     local obj = cls.New(transform, gameObject)
-    self.panels[panelName] = obj
-
-    obj:Awake()
+    
+    self.panels[prefabPath].Instance = obj
 end
 
-function PanelMgr:AwakePanelItem(itemName, transform, gameObject)
+function PanelMgr:NewPanelItem(itemName, transform, gameObject)
+
+    assert(supercline.classes[itemName], "unknown panel item class: "..itemName)
 
     local cls = supercline.classes[itemName]
     local obj = cls.New(transform, gameObject)
 
-    obj:Awake()
-
     return obj
 end
 
-function PanelMgr:OnOpen(panelName, panelItem, controls)
-
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnOpen(controls)
-    else
-        panelItem:OnOpen(controls)
-    end
+function PanelMgr:OnOpen(prefabPath, controls)
+    self.panels[prefabPath].Instance:OnOpen(controls)
 end
 
-function PanelMgr:OnShow(panelName)
-    self.panels[panelName]:OnShow()
+function PanelMgr:OnShow(prefabPath)
+    self.panels[prefabPath].Instance:OnShow()
 end
 
-function PanelMgr:OnHide(panelName)
-    self.panels[panelName]:OnHide()
+function PanelMgr:OnHide(prefabPath)
+    self.panels[prefabPath].Instance:OnHide()
 end
 
-function PanelMgr:OnClose(panelName)
-    self.panels[panelName]:OnClose()
+function PanelMgr:OnClose(prefabPath)
+    self.panels[prefabPath].Instance:OnClose()
 end
 
 
-
-function PanelMgr:OnEnable(panelName, panelItem)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnEnable()
-    else
-        panelItem:OnEnable()
-    end
+function PanelMgr:OnClick(prefabPath, btn)
+    self.panels[prefabPath].Instance:OnClick(btn)
 end
 
-function PanelMgr:Start(panelName, panelItem)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:Start()
-    else
-        panelItem:Start()
-    end
+function PanelMgr:OnInputValueChanged(prefabPath, input, val)
+    self.panels[prefabPath].Instance:OnInputValueChanged(input, val)
 end
 
-function PanelMgr:OnDisable(panelName, panelItem)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnDisable()
-    else
-        panelItem:OnDisable()
-    end
+function PanelMgr:OnInputEndEdit(prefabPath, input, val)
+    self.panels[prefabPath].Instance:OnInputEndEdit(input, val)
 end
 
-function PanelMgr:OnDestroy(panelName, panelItem)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnDestroy()
-    else
-        panelItem:OnDestroy()
-    end
+function PanelMgr:OnToggleValueChanged(prefabPath, tog, val)
+    self.panels[prefabPath].Instance:OnToggleValueChanged(tog, val)
 end
 
-function PanelMgr:OnClick(panelName, panelItem, btn)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnClick(btn)
-    else
-        panelItem:OnClick(btn)
-    end
+function PanelMgr:OnSliderValueChanged(prefabPath, slider, val)
+    self.panels[prefabPath].Instance:OnSliderValueChanged(slider, val)
 end
 
-function PanelMgr:OnInputValueChanged(panelName, panelItem, input, val)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnInputValueChanged(input, val)
-    else
-        panelItem:OnInputValueChanged(input, val)
-    end
+function PanelMgr:OnLoopGridValueChanged(prefabPath, grid, item, index)
+    self.panels[prefabPath].Instance:OnLoopGridValueChanged(grid, item, index)
 end
 
-function PanelMgr:OnInputEndEdit(panelName, panelItem, input, val)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnInputEndEdit(input, val)
-    else
-        panelItem:OnInputEndEdit(input, val)
-    end
+function PanelMgr:OnDown(prefabPath, go)
+    self.panels[prefabPath].Instance:OnDown(go)
 end
 
-function PanelMgr:OnToggleValueChanged(panelName, panelItem, tog, val)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnToggleValueChanged(tog, val)
-    else
-        panelItem:OnToggleValueChanged(tog, val)
-    end
+function PanelMgr:OnUp(prefabPath, go)
+    self.panels[prefabPath].Instance:OnUp(go)
 end
 
-function PanelMgr:OnSliderValueChanged(panelName, panelItem, slider, val)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnSliderValueChanged(slider, val)
-    else
-        panelItem:OnSliderValueChanged(slider, val)
-    end
+function PanelMgr:OnEnter(prefabPath, go)
+    self.panels[prefabPath].Instance:OnEnter(go)
 end
 
-function PanelMgr:OnDown(panelName, panelItem, go)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnDown(go)
-    else
-        panelItem:OnDown(go)
-    end
+function PanelMgr:OnExit(prefabPath, go)
+    self.panels[prefabPath].Instance:OnExit(go)
 end
 
-function PanelMgr:OnUp(panelName, panelItem, go)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnUp(go)
-    else
-        panelItem:OnUp(go)
-    end
+function PanelMgr:OnLongPress(prefabPath, go)
+    self.panels[prefabPath].Instance:OnLongPress(go)
 end
 
-function PanelMgr:OnEnter(panelName, panelItem, go)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnEnter(go)
-    else
-        panelItem:OnEnter(go)
-    end
+function PanelMgr:OnLongPressEnd(prefabPath, go)
+    self.panels[prefabPath].Instance:OnLongPressEnd(go)
 end
 
-function PanelMgr:OnExit(panelName, panelItem, go)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnExit(go)
-    else
-        panelItem:OnExit(go)
-    end
+function PanelMgr:OnDragStart(prefabPath, go, eventData)
+    self.panels[prefabPath].Instance:OnDragStart(go, eventData)
 end
 
-function PanelMgr:OnLongPress(panelName, panelItem, go)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnLongPress(go)
-    else
-        panelItem:OnLongPress(go)
-    end
+function PanelMgr:OnDrag(prefabPath, go, eventData)
+    self.panels[prefabPath].Instance:OnDrag(go, eventData)
 end
 
-function PanelMgr:OnLongPressEnd(panelName, panelItem, go)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnLongPressEnd(go)
-    else
-        panelItem:OnLongPressEnd(go)
-    end
-end
-
-function PanelMgr:OnDragStart(panelName, panelItem, go, eventData)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnDragStart(go, eventData)
-    else
-        panelItem:OnDragStart(go, eventData)
-    end
-end
-
-function PanelMgr:OnDrag(panelName, panelItem, go, eventData)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnDrag(go, eventData)
-    else
-        panelItem:OnDrag(go, eventData)
-    end
-end
-
-function PanelMgr:OnDragEnd(panelName, panelItem, go, eventData)
-    if panelName ~= "" and panelItem == nil then
-        self.panels[panelName]:OnDragEnd(go, eventData)
-    else
-        panelItem:OnDragEnd(go, eventData)
-    end
+function PanelMgr:OnDragEnd(prefabPath, go, eventData)
+    self.panels[prefabPath].Instance:OnDragEnd(go, eventData)
 end
 
 function PanelMgr:Main()
-    supercline.cPanelMgr:Open(supercline.Prefab.PanelLogin)
+    supercline.Singleton.PanelMgr:Open(supercline.Prefab.PanelLogin, true)
 end
 
 return PanelMgr

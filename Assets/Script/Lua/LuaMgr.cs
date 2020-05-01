@@ -31,7 +31,7 @@ namespace CAE.Core
         public static LuaMgr Instance { get; } = Activator.CreateInstance<LuaMgr>();
 
         public ILuaPanelMgr LuaPanelMgr
-        { get; set; }
+        { get; private set; }
 
         public void Init()
         {

@@ -24,126 +24,118 @@ namespace CAE.Core
 
     public sealed class ULuaPanelItem : PanelBase
     {
-        private ILuaPanelItem mLuaPanelItem = null;
+        public ILuaPanelItem LuaPanelItem { get; private set; } = null;
         public string PanelItemName = string.Empty;
+
+        public override void OnCreate()
+        {
+            LuaPanelItem = LuaMgr.Instance.LuaPanelMgr.NewPanelItem(PanelItemName, transform, gameObject);
+        }
 
         public override void OnOpen()
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnOpen(mControlHash);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnOpen(mControlHash);
         }
 
         public override void OnClose()
         {
+            if (LuaPanelItem != null)
+            {
+                LuaPanelItem.OnClose();
+                LuaPanelItem = null;
+            }
+
+            // TO CLine: lua gc
         }
 
         public override void OnShow()
         {
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnShow();
         }
 
         public override void OnHide()
         {
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnShow();
         }
 
-        private void Awake()
-        {
-            mLuaPanelItem = LuaMgr.Instance.LuaPanelMgr.AwakePanelItem(PanelItemName, transform, gameObject);
-        }
-
-        private void OnEnable()
-        {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnEnable();
-        }
-
-        private void Start()
-        {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.Start();
-        }
-
-        private void OnDisable()
-        {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnDisable();
-        }
-
-        private void OnDestroy()
-        {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnDestroy();
-        }
 
         protected override void OnClick(Button btn)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnClick(btn);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnClick(btn);
         }
         protected override void OnInputValueChanged(InputField input, string val)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnInputValueChanged(input, val);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnInputValueChanged(input, val);
         }
         protected override void OnInputEndEdit(InputField input, string val)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnInputEndEdit(input, val);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnInputEndEdit(input, val);
         }
         protected override void OnToggleValueChanged(Toggle tog, bool val)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnToggleValueChanged(tog, val);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnToggleValueChanged(tog, val);
         }
         protected override void OnSliderValueChanged(Slider slider, float val)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnSliderValueChanged(slider, val);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnSliderValueChanged(slider, val);
+        }
+        protected override void OnLoopGridValueChanged(UILoopGrid loopGrid, ILuaPanelItem item, int index)
+        {
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnLoopGridValueChanged(loopGrid, item, index);
         }
         protected override void OnDown(GameObject go)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnDown(go);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnDown(go);
         }
         protected override void OnUp(GameObject go)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnUp(go);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnUp(go);
         }
         protected override void OnEnter(GameObject go)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnEnter(go);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnEnter(go);
         }
         protected override void OnExit(GameObject go)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnExit(go);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnExit(go);
         }
         protected override void OnLongPress(GameObject go)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnLongPress(go);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnLongPress(go);
         }
         protected override void OnLongPressEnd(GameObject go)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnLongPressEnd(go);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnLongPressEnd(go);
         }
         protected override void OnDragStart(GameObject go, PointerEventData eventData)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnDragStart(go, eventData);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnDragStart(go, eventData);
         }
         protected override void OnDrag(GameObject go, PointerEventData eventData)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnDrag(go, eventData);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnDrag(go, eventData);
         }
         protected override void OnDragEnd(GameObject go, PointerEventData eventData)
         {
-            if (mLuaPanelItem != null)
-                mLuaPanelItem.OnDragEnd(go, eventData);
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnDragEnd(go, eventData);
         }
     }
-
 }

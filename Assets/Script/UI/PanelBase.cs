@@ -37,15 +37,18 @@ namespace CAE.Core
             get { return 0; }
         }
 
+        public string Prefab
+        { get; set; }
+
+        public abstract void OnCreate();
         public abstract void OnOpen();
         public abstract void OnClose();
         public abstract void OnShow();
         public abstract void OnHide();
 
-        // TO CLine: u cane extend grid view etc.
         public void BuildControl()
         {
-            Transform[] trs = gameObject.GetComponentsInChildren<Transform>();
+            Transform[] trs = gameObject.GetComponentsInChildren<Transform>(true);
             for (int i = 0; i < trs.Length; ++i)
             {
                 string name = trs[i].name;
@@ -53,6 +56,19 @@ namespace CAE.Core
                 string prefix = name.Substring(0, len);
                 switch (prefix)
                 {
+                    case "Widget_":
+                        {
+                            RectTransform rt = trs[i].GetComponent<RectTransform>();
+                            if (rt == null)
+                            {
+                                Debug.LogErrorFormat("{0} require component \'RectTransform\'.", name);
+                            }
+                            else
+                            {
+                                mControlHash.Add(name, rt);
+                            }
+                        }
+                        break;
                     case "Text_":
                         {
                             Text label = trs[i].GetComponent<Text>();
@@ -131,7 +147,7 @@ namespace CAE.Core
                             else
                             {
                                 mControlHash.Add(name, slider);
-
+                                
                                 slider.onValueChanged.AddListener((val) =>
                                 {
                                     onSliderValueChanged(slider.gameObject, val);
@@ -176,6 +192,25 @@ namespace CAE.Core
                             }
                         }
                         break;
+                    case "LoopGrid_":
+                        {
+                            UILoopGrid loopGird= trs[i].GetComponent<UILoopGrid>();
+                            if (loopGird == null)
+                            {
+                                Debug.LogErrorFormat("{0} require component \'UILoopGrid\'.", name);
+                            }
+                            else
+                            {
+                                mControlHash.Add(name, loopGird);
+
+                                loopGird.Init();
+                                loopGird.OnLoopGridValueChanged = (item, index) =>
+                                {
+                                    onLoopGridValueChanged(loopGird.gameObject, item, index);
+                                };
+                            }
+                        }
+                        break;
                 }
             }
         }
@@ -190,6 +225,8 @@ namespace CAE.Core
         protected virtual void OnToggleValueChanged(Toggle tog, bool val)
         { }
         protected virtual void OnSliderValueChanged(Slider slider, float val)
+        { }
+        protected virtual void OnLoopGridValueChanged(UILoopGrid loopGrid, ILuaPanelItem item,int index)
         { }
         protected virtual void OnDown(GameObject go)
         { }
@@ -235,6 +272,11 @@ namespace CAE.Core
         {
             Slider slider = go.GetComponent<Slider>();
             OnSliderValueChanged(slider, val);
+        }
+        private void onLoopGridValueChanged(GameObject go, ILuaPanelItem item, int index)
+        {
+            UILoopGrid loopGird = go.GetComponent<UILoopGrid>();
+            OnLoopGridValueChanged(loopGird, item, index);
         }
         private void onDown(GameObject go)
         {

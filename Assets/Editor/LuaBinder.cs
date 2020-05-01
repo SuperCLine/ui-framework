@@ -135,6 +135,7 @@ namespace CAE.Core
             typeof(Slider.SliderEvent),
 
             typeof(PanelMgr),
+            typeof(UILoopGrid),
 
         };
 

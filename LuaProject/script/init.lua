@@ -1,6 +1,7 @@
 print("------------- init lua -------------")
 
 supercline = {}
+supercline.Singleton = {}
 supercline.Prefab = {}
 
 require("script.util.LuaPanda").start("127.0.0.1",8818);

@@ -27,51 +27,46 @@ namespace CAE.Core
 
     public interface ILuaPanelMgr
     {
-        void AwakePanel(string panelName, Transform tr, GameObject go);
-        ILuaPanelItem AwakePanelItem(string itemName, Transform tr, GameObject go);
+        void NewPanel(string panelName, string prefabPath, Transform tr, GameObject go);
+        ILuaPanelItem NewPanelItem(string itemName, Transform tr, GameObject go);
 
-        void OnOpen(string panelName, ILuaPanelItem panelItem, Dictionary<string, Component> controls);
-        void OnShow(string panelName);
-        void OnHide(string panelName);
-        void OnClose(string panelName);
+        void OnOpen(string prefabPath, Dictionary<string, Component> controls);
+        void OnShow(string prefabPath);
+        void OnHide(string prefabPath);
+        void OnClose(string prefabPath);
 
-        void OnEnable(string panelName, ILuaPanelItem panelItem);
-        void Start(string panelName, ILuaPanelItem panelItem);
-        void OnDisable(string panelName, ILuaPanelItem panelItem);
-        void OnDestroy(string panelName, ILuaPanelItem panelItem);
-
-        void OnClick(string panelName, ILuaPanelItem panelItem, Button btn);
-        void OnInputValueChanged(string panelName, ILuaPanelItem panelItem, InputField input, string val);
-        void OnInputEndEdit(string panelName, ILuaPanelItem panelItem, InputField input, string val);
-        void OnToggleValueChanged(string panelName, ILuaPanelItem panelItem, Toggle tog, bool val);
-        void OnSliderValueChanged(string panelName, ILuaPanelItem panelItem, Slider slider, float val);
-        void OnDown(string panelName, ILuaPanelItem panelItem, GameObject go);
-        void OnUp(string panelName, ILuaPanelItem panelItem, GameObject go);
-        void OnEnter(string panelName, ILuaPanelItem panelItem, GameObject go);
-        void OnExit(string panelName, ILuaPanelItem panelItem, GameObject go);
-        void OnLongPress(string panelName, ILuaPanelItem panelItem, GameObject go);
-        void OnLongPressEnd(string panelName, ILuaPanelItem panelItem, GameObject go);
-        void OnDragStart(string panelName, ILuaPanelItem panelItem, GameObject go, PointerEventData eventData);
-        void OnDrag(string panelName, ILuaPanelItem panelItem, GameObject go, PointerEventData eventData);
-        void OnDragEnd(string panelName, ILuaPanelItem panelItem, GameObject go, PointerEventData eventData);
+        void OnClick(string prefabPath, Button btn);
+        void OnInputValueChanged(string prefabPath, InputField input, string val);
+        void OnInputEndEdit(string prefabPath, InputField input, string val);
+        void OnToggleValueChanged(string prefabPath, Toggle tog, bool val);
+        void OnSliderValueChanged(string prefabPath, Slider slider, float val);
+        void OnLoopGridValueChanged(string prefabPath, UILoopGrid loopGrid, ILuaPanelItem item, int index);
+        void OnDown(string prefabPath, GameObject go);
+        void OnUp(string prefabPath, GameObject go);
+        void OnEnter(string prefabPath, GameObject go);
+        void OnExit(string prefabPath, GameObject go);
+        void OnLongPress(string prefabPath, GameObject go);
+        void OnLongPressEnd(string prefabPath, GameObject go);
+        void OnDragStart(string prefabPath, GameObject go, PointerEventData eventData);
+        void OnDrag(string prefabPath, GameObject go, PointerEventData eventData);
+        void OnDragEnd(string prefabPath, GameObject go, PointerEventData eventData);
 
         void Main();
     }
 
     public interface ILuaPanelItem
     {
-        void Awake();
         void OnOpen(Dictionary<string, Component> controls);
-        void OnEnable();
-        void Start();
-        void OnDisable();
-        void OnDestroy();
+        void OnShow();
+        void OnHide();
+        void OnClose();
 
         void OnClick(Button btn);
         void OnInputValueChanged(InputField input, string val);
         void OnInputEndEdit(InputField input, string val);
         void OnToggleValueChanged(Toggle tog, bool val);
         void OnSliderValueChanged(Slider slider, float val);
+        void OnLoopGridValueChanged(UILoopGrid loopGrid, ILuaPanelItem item, int index);
         void OnDown(GameObject go);
         void OnUp(GameObject go);
         void OnEnter(GameObject go);
