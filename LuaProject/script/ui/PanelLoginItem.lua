@@ -11,6 +11,18 @@ function PanelLoginItem:OnOpen(controls)
     self.ui.Button = controls:get_Item("Button_Item")
 end
 
+function PanelLogin:OnClose()
+
+end
+
+function PanelLogin:OnShow()
+    
+end
+
+function PanelLogin:OnHide()
+
+end
+
 function PanelLoginItem:OnClick(btn)
 
     print(string.format("<color=cyan> PanelLoginItem:OnClick: %s </color>", btn.name))

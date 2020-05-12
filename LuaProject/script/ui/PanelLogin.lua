@@ -18,24 +18,16 @@ function PanelLogin:OnOpen(controls)
     self.LoopGridLogin:ShowList(20)
 end
 
-function PanelLogin:Awake()
-    print("<color=yellow>PanelLogin awake</color>")
+function PanelLogin:OnClose()
+    print("<color=yellow>PanelLogin OnClose</color>")
 end
 
-function PanelLogin:OnEnable()
+function PanelLogin:OnShow()
     
 end
 
-function PanelLogin:Start()
+function PanelLogin:OnHide()
 
-end
-
-function PanelLogin:OnDisable()
-    
-end
-
-function PanelLogin:OnDestroy()
-    
 end
 
 function PanelLogin:OnClick(btn)
