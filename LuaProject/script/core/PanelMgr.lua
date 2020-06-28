@@ -15,6 +15,8 @@ function PanelMgr:Open(prefabPath, show)
     self.panels[prefabPath] = {}
 
     cPanelMgr:Open(prefabPath, show)
+
+    return self:GetPanel(prefabPath)
 end
 
 function PanelMgr:Close(prefabPath)
@@ -152,6 +154,10 @@ end
 
 function PanelMgr:OnDragEnd(prefabPath, go, eventData)
     self.panels[prefabPath].Instance:OnDragEnd(go, eventData)
+end
+
+function PanelMgr:OnClickItem(item, btn)
+    item:PlayClickAudio(btn)
 end
 
 function PanelMgr:Main()

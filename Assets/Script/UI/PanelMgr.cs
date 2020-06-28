@@ -70,6 +70,11 @@ namespace CAE.Core
             {
                 Show(prefabPath);
             }
+            else
+            {
+                //panel.gameObject.SetActive(false);
+                SetActive(panel, false);
+            }
         }
 
         public void Close(string prefabPath)
@@ -87,9 +92,10 @@ namespace CAE.Core
             PanelBase panel;
             if (mPanelHash.TryGetValue(prefabPath, out panel))
             {
-                panel.OnShow();
+                //panel.gameObject.SetActive(true);
+                SetActive(panel, true);
 
-                panel.gameObject.SetActive(true);
+                panel.OnShow();
             }
         }
 
@@ -98,12 +104,26 @@ namespace CAE.Core
             PanelBase panel;
             if (mPanelHash.TryGetValue(prefabPath, out panel))
             {
-                panel.OnHide();
+                //panel.gameObject.SetActive(false);
+                SetActive(panel, false);
 
-                panel.gameObject.SetActive(false);
+                panel.OnHide();
             }
         }
 
+        private void SetActive(PanelBase panel, bool active)
+        {
+            if (active)
+            {
+                panel.CanvasGroup.alpha = 1;
+                panel.CanvasGroup.blocksRaycasts = true;
+            }
+            else
+            {
+                panel.CanvasGroup.alpha = 0;
+                panel.CanvasGroup.blocksRaycasts = false;
+            }
+        }
 
 
         private PanelBase CreatePanel(string prefabPath)
@@ -111,12 +131,13 @@ namespace CAE.Core
             GameObject go = GameObject.Instantiate(ResourceMgr.Instance.LoadGameObject(prefabPath));
             PanelBase panel = go.GetComponent<PanelBase>();
             panel.Prefab = prefabPath;
-            panel.BuildControl();
+            panel.CanvasGroup = go.AddComponent<CanvasGroup>();
             Transform parent = GetLayer(panel.PanelLayer);
             RectTransform rect = go.transform as RectTransform;
             AddUIChild(rect, parent as RectTransform);
             rect.SetAsLastSibling();
 
+            panel.BuildControl();
             panel.OnCreate();
 
             mPanelHash.Add(prefabPath, panel);
@@ -128,6 +149,7 @@ namespace CAE.Core
         {
             if (panel != null)
             {
+                panel.OnHide();
                 panel.OnClose();
 
                 GameObject.Destroy(panel.gameObject);
@@ -159,7 +181,7 @@ namespace CAE.Core
 
         private int GetSiblingIndex(int index)
         {
-            int siblingIndex = 0;
+            int siblingIndex = 2;
 
             using (var itr = mLayerHash.Keys.GetEnumerator())
             {

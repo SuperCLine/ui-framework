@@ -25,29 +25,25 @@ namespace CAE.Core
     public sealed class UIEventListener : MonoBehaviour,
                                         IPointerClickHandler,
                                         IPointerDownHandler,
-                                        IPointerEnterHandler,
-                                        IPointerExitHandler,
                                         IPointerUpHandler,
-                                        IBeginDragHandler,
-                                        IDragHandler,
-                                        IEndDragHandler
+                                        IPointerEnterHandler,
+                                        IPointerExitHandler
     {
         public delegate void VoidDelegate(GameObject go);
-        public delegate void DragDelegate(GameObject go, PointerEventData eventData);
 
         public VoidDelegate onClick;
         public VoidDelegate onDown;
         public VoidDelegate onUp;
         public VoidDelegate onEnter;
         public VoidDelegate onExit;
+        public VoidDelegate onLongPressStart;
         public VoidDelegate onLongPress;
         public VoidDelegate onLongPressEnd;
-        public DragDelegate onDragStart;
-        public DragDelegate onDrag;
-        public DragDelegate onDragEnd;
 
-        private float delay = 0.2f;
         private bool isDown = false;
+        private float recognitionTime = 0.2f;
+        private float intervalTime = 0.01f;
+        private bool isLongPressed = false;
         private float lastIsDownTime;
 
         public static UIEventListener Get(GameObject go)
@@ -80,13 +76,15 @@ namespace CAE.Core
         public void OnPointerUp(PointerEventData eventData)
         {
             isDown = false;
-            if (onLongPressEnd != null)
+
+            if (isLongPressed)
             {
-                onLongPressEnd(gameObject);
+                onLongPressEnd?.Invoke(gameObject);
+                isLongPressed = false;
             }
-            if (onUp != null)
+            else
             {
-                onUp(gameObject);
+                onUp?.Invoke(gameObject);
             }
         }
 
@@ -107,44 +105,37 @@ namespace CAE.Core
             }
         }
 
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            if (onDragStart != null)
-            {
-                onDragStart(gameObject, eventData);
-            }
-        }
-
-        public void OnDrag(PointerEventData eventData)
-        {
-            if (onDrag != null)
-            {
-                onDrag(gameObject, eventData);
-            }
-        }
-
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            if (onDragEnd != null)
-            {
-                onDragEnd(gameObject, eventData);
-            }
-        }
-
         private void Update()
         {
             if (isDown)
             {
-                if (Time.time - lastIsDownTime > delay)
+                if (!isLongPressed)
                 {
-                    if (onLongPress != null)
+                    if (Time.time - lastIsDownTime > recognitionTime)
                     {
-                        onLongPress(gameObject);
-                    }
+                        if (onLongPressStart != null)
+                        {
+                            onLongPressStart(gameObject);
+                        }
 
-                    lastIsDownTime = Time.time;
+                        isLongPressed = true;
+                        lastIsDownTime = Time.time;
+                    }
+                }
+                else
+                {
+                    if (Time.time - lastIsDownTime > intervalTime)
+                    {
+                        if (onLongPress != null)
+                        {
+                            onLongPress(gameObject);
+                        }
+
+                        lastIsDownTime = Time.time;
+                    }
                 }
             }
+
         }
 
     }

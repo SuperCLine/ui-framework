@@ -35,11 +35,11 @@ namespace CAE.Core
         void OnHide(string prefabPath);
         void OnClose(string prefabPath);
 
-        void OnClick(string prefabPath, Button btn);
-        void OnInputValueChanged(string prefabPath, InputField input, string val);
-        void OnInputEndEdit(string prefabPath, InputField input, string val);
-        void OnToggleValueChanged(string prefabPath, Toggle tog, bool val);
-        void OnSliderValueChanged(string prefabPath, Slider slider, float val);
+        void OnClick(string prefabPath, Component btn);
+        void OnInputValueChanged(string prefabPath, Component input, string val);
+        void OnInputEndEdit(string prefabPath, Component input, string val);
+        void OnToggleValueChanged(string prefabPath, Component tog, bool val);
+        void OnSliderValueChanged(string prefabPath, Component slider, float val);
         void OnLoopGridValueChanged(string prefabPath, UILoopGrid loopGrid, ILuaPanelItem item, int index);
         void OnDown(string prefabPath, GameObject go);
         void OnUp(string prefabPath, GameObject go);
@@ -51,6 +51,8 @@ namespace CAE.Core
         void OnDrag(string prefabPath, GameObject go, PointerEventData eventData);
         void OnDragEnd(string prefabPath, GameObject go, PointerEventData eventData);
 
+        void OnClickItem(ILuaPanelItem item, Component btn);
+
         void Main();
     }
 
@@ -61,11 +63,11 @@ namespace CAE.Core
         void OnHide();
         void OnClose();
 
-        void OnClick(Button btn);
-        void OnInputValueChanged(InputField input, string val);
-        void OnInputEndEdit(InputField input, string val);
-        void OnToggleValueChanged(Toggle tog, bool val);
-        void OnSliderValueChanged(Slider slider, float val);
+        void OnClick(Component btn);
+        void OnInputValueChanged(Component input, string val);
+        void OnInputEndEdit(Component input, string val);
+        void OnToggleValueChanged(Component tog, bool val);
+        void OnSliderValueChanged(Component slider, float val);
         void OnLoopGridValueChanged(UILoopGrid loopGrid, ILuaPanelItem item, int index);
         void OnDown(GameObject go);
         void OnUp(GameObject go);

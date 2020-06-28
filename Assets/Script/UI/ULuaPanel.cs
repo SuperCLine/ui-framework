@@ -65,15 +65,15 @@ namespace CAE.Core
         }
 
 
-        protected override void OnClick(Button btn)
+        protected override void OnClick(Component btn)
         { LuaMgr.Instance.LuaPanelMgr.OnClick(Prefab, btn); }
-        protected override void OnInputValueChanged(InputField input, string val)
+        protected override void OnInputValueChanged(Component input, string val)
         { LuaMgr.Instance.LuaPanelMgr.OnInputValueChanged(Prefab, input, val); }
-        protected override void OnInputEndEdit(InputField input, string val)
+        protected override void OnInputEndEdit(Component input, string val)
         { LuaMgr.Instance.LuaPanelMgr.OnInputEndEdit(Prefab, input, val); }
-        protected override void OnToggleValueChanged(Toggle tog, bool val)
+        protected override void OnToggleValueChanged(Component tog, bool val)
         { LuaMgr.Instance.LuaPanelMgr.OnToggleValueChanged(Prefab, tog, val); }
-        protected override void OnSliderValueChanged(Slider slider, float val)
+        protected override void OnSliderValueChanged(Component slider, float val)
         { LuaMgr.Instance.LuaPanelMgr.OnSliderValueChanged(Prefab, slider, val); }
         protected override void OnLoopGridValueChanged(UILoopGrid loopGrid, ILuaPanelItem item, int index)
         { LuaMgr.Instance.LuaPanelMgr.OnLoopGridValueChanged(Prefab, loopGrid, item, index); }

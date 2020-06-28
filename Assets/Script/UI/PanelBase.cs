@@ -22,6 +22,8 @@ namespace CAE.Core
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
     using System.Collections.Generic;
+    using TMPro;
+    using System;
 
     public abstract class PanelBase : MonoBehaviour
     {
@@ -40,9 +42,16 @@ namespace CAE.Core
         public string Prefab
         { get; set; }
 
+        public CanvasGroup CanvasGroup
+        { get; set; }
+
         public abstract void OnCreate();
         public abstract void OnOpen();
-        public abstract void OnClose();
+
+        public virtual void OnClose()
+        {
+            mControlHash.Clear();
+        }
         public abstract void OnShow();
         public abstract void OnHide();
 
@@ -71,9 +80,14 @@ namespace CAE.Core
                         break;
                     case "Text_":
                         {
-                            Text label = trs[i].GetComponent<Text>();
+                            Component label = trs[i].GetComponent<Text>();
                             if (label == null)
                             {
+                                label=trs[i].GetComponent<TextMeshProUGUI>();
+                            }
+                            if (label == null)
+                            {
+                                trs[i].GetComponent<TextMeshProUGUI>();
                                 Debug.LogErrorFormat("{0} require component \'Text\'.", name);
                             }
                             else
@@ -92,8 +106,26 @@ namespace CAE.Core
                             else
                             {
                                 mControlHash.Add(name, btn);
-
-                                UIEventListener.Get(btn.gameObject).onClick = onClick;
+                                btn.onClick.RemoveAllListeners();
+                                btn.onClick.AddListener(() => onClick(btn));
+                            }
+                        }
+                        break;
+                    case "ExtButton_":
+                        {
+                            Button btn = trs[i].GetComponent<Button>();
+                            if (btn == null)
+                            {
+                                Debug.LogErrorFormat("{0} require component \'Button\'.", name);
+                            }
+                            else
+                            {
+                                mControlHash.Add(name, btn);
+                                UIEventListener li = UIEventListener.Get(btn.gameObject);
+                                li.onClick = (go) => onClick(btn);
+                                li.onLongPressStart = onLongPressStart;
+                                li.onLongPress = onLongPress;
+                                li.onLongPressEnd = onLongPressEnd;
                             }
                         }
                         break;
@@ -108,14 +140,44 @@ namespace CAE.Core
                             {
                                 mControlHash.Add(name, input);
 
+                                input.onValueChanged.RemoveAllListeners();
                                 input.onValueChanged.AddListener((val) =>
                                 {
-                                    onInputValueChanged(input.gameObject, val);
+                                    onInputValueChanged(input, val);
                                 });
+                                input.onEndEdit.RemoveAllListeners();
                                 input.onEndEdit.AddListener((val) =>
                                 {
-                                    onInputEndEdit(input.gameObject, val);
+                                    onInputEndEdit(input, val);
                                 });
+                            }
+                        }
+                        break;
+                    case "TMPInput_":
+                        {
+                            if (!name.Contains("Input Caret"))
+                            {
+
+                                TMP_InputField input = trs[i].GetComponent<TMP_InputField>();
+                                if (input == null)
+                                {
+                                    Debug.LogErrorFormat("{0} require component \'InputField\'.", name);
+                                }
+                                else
+                                {
+                                    mControlHash.Add(name, input);
+
+                                    input.onValueChanged.RemoveAllListeners();
+                                    input.onValueChanged.AddListener((val) =>
+                                    {
+                                        onInputValueChanged(input, val);
+                                    });
+                                    input.onEndEdit.RemoveAllListeners();
+                                    input.onEndEdit.AddListener((val) =>
+                                    {
+                                        onInputEndEdit(input, val);
+                                    });
+                                }
                             }
                         }
                         break;
@@ -130,9 +192,10 @@ namespace CAE.Core
                             {
                                 mControlHash.Add(name, tog);
 
+                                tog.onValueChanged.RemoveAllListeners();
                                 tog.onValueChanged.AddListener((val) =>
                                 {
-                                    onToggleValueChanged(tog.gameObject, val);
+                                    onToggleValueChanged(tog, val);
                                 });
                             }
                         }
@@ -147,10 +210,11 @@ namespace CAE.Core
                             else
                             {
                                 mControlHash.Add(name, slider);
-                                
+
+                                slider.onValueChanged.RemoveAllListeners();
                                 slider.onValueChanged.AddListener((val) =>
                                 {
-                                    onSliderValueChanged(slider.gameObject, val);
+                                    onSliderValueChanged(slider, val);
                                 });
                             }
                         }
@@ -171,11 +235,27 @@ namespace CAE.Core
                                 li.onUp = onUp;
                                 li.onEnter = onEnter;
                                 li.onExit = onExit;
+                                li.onLongPressStart = onLongPressStart;
                                 li.onLongPress = onLongPress;
                                 li.onLongPressEnd = onLongPressEnd;
-                                li.onDragStart = onDragStart;
-                                li.onDrag = onDrag;
-                                li.onDragEnd = onDragEnd;
+
+                                UIDragListener dl = UIDragListener.Get(img.gameObject);
+                                dl.onDragStart = onDragStart;
+                                dl.onDrag = onDrag;
+                                dl.onDragEnd = onDragEnd;
+                            }
+                        }
+                        break;
+                    case "RawImage_":
+                        {
+                            RawImage img = trs[i].GetComponent<RawImage>();
+                            if (img == null)
+                            {
+                                Debug.LogErrorFormat("{0} require component \'RawImage\'.", name);
+                            }
+                            else
+                            {
+                                mControlHash.Add(name, img);
                             }
                         }
                         break;
@@ -216,15 +296,15 @@ namespace CAE.Core
         }
 
         #region event
-        protected virtual void OnClick(Button btn)
+        protected virtual void OnClick(Component btn)
         { }
-        protected virtual void OnInputValueChanged(InputField input, string val)
+        protected virtual void OnInputValueChanged(Component input, string val)
         { }
-        protected virtual void OnInputEndEdit(InputField input, string val)
+        protected virtual void OnInputEndEdit(Component input, string val)
         { }
-        protected virtual void OnToggleValueChanged(Toggle tog, bool val)
+        protected virtual void OnToggleValueChanged(Component tog, bool val)
         { }
-        protected virtual void OnSliderValueChanged(Slider slider, float val)
+        protected virtual void OnSliderValueChanged(Component slider, float val)
         { }
         protected virtual void OnLoopGridValueChanged(UILoopGrid loopGrid, ILuaPanelItem item,int index)
         { }
@@ -235,6 +315,8 @@ namespace CAE.Core
         protected virtual void OnEnter(GameObject go)
         { }
         protected virtual void OnExit(GameObject go)
+        { }
+        protected virtual void OnLongPressStart(GameObject go)
         { }
         protected virtual void OnLongPress(GameObject go)
         { }
@@ -248,30 +330,25 @@ namespace CAE.Core
         { }
         #endregion event
 
-        private void onClick(GameObject go)
+        private void onClick(Component go)
         {
-            Button btn = go.GetComponent<Button>();
-            OnClick(btn);
+            OnClick(go);
         }
-        private void onInputValueChanged(GameObject go, string val)
+        private void onInputValueChanged(Component go, string val)
         {
-            InputField input = go.GetComponent<InputField>();
-            OnInputValueChanged(input, val);
+            OnInputValueChanged(go, val);
         }
-        private void onInputEndEdit(GameObject go, string val)
+        private void onInputEndEdit(Component go, string val)
         {
-            InputField input = go.GetComponent<InputField>();
-            OnInputEndEdit(input, val);
+            OnInputEndEdit(go, val);
         }
-        private void onToggleValueChanged(GameObject go, bool val)
+        private void onToggleValueChanged(Component go, bool val)
         {
-            Toggle tog = go.GetComponent<Toggle>();
-            OnToggleValueChanged(tog, val);
+            OnToggleValueChanged(go, val);
         }
-        private void onSliderValueChanged(GameObject go, float val)
+        private void onSliderValueChanged(Component go, float val)
         {
-            Slider slider = go.GetComponent<Slider>();
-            OnSliderValueChanged(slider, val);
+            OnSliderValueChanged(go, val);
         }
         private void onLoopGridValueChanged(GameObject go, ILuaPanelItem item, int index)
         {
@@ -293,6 +370,10 @@ namespace CAE.Core
         private void onExit(GameObject go)
         {
             OnExit(go);
+        }
+        private void onLongPressStart(GameObject go)
+        {
+            OnLongPressStart(go);
         }
         private void onLongPress(GameObject go)
         {

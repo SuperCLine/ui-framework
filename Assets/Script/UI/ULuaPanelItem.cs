@@ -62,27 +62,30 @@ namespace CAE.Core
         }
 
 
-        protected override void OnClick(Button btn)
+        protected override void OnClick(Component btn)
         {
             if (LuaPanelItem != null)
+            {
+                LuaMgr.Instance.LuaPanelMgr.OnClickItem(LuaPanelItem, btn);
                 LuaPanelItem.OnClick(btn);
+            }
         }
-        protected override void OnInputValueChanged(InputField input, string val)
+        protected override void OnInputValueChanged(Component input, string val)
         {
             if (LuaPanelItem != null)
                 LuaPanelItem.OnInputValueChanged(input, val);
         }
-        protected override void OnInputEndEdit(InputField input, string val)
+        protected override void OnInputEndEdit(Component input, string val)
         {
             if (LuaPanelItem != null)
                 LuaPanelItem.OnInputEndEdit(input, val);
         }
-        protected override void OnToggleValueChanged(Toggle tog, bool val)
+        protected override void OnToggleValueChanged(Component tog, bool val)
         {
             if (LuaPanelItem != null)
                 LuaPanelItem.OnToggleValueChanged(tog, val);
         }
-        protected override void OnSliderValueChanged(Slider slider, float val)
+        protected override void OnSliderValueChanged(Component slider, float val)
         {
             if (LuaPanelItem != null)
                 LuaPanelItem.OnSliderValueChanged(slider, val);

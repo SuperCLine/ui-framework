@@ -11,15 +11,15 @@ function PanelLoginItem:OnOpen(controls)
     self.ui.Button = controls:get_Item("Button_Item")
 end
 
-function PanelLogin:OnClose()
+function PanelLoginItem:OnClose()
 
 end
 
-function PanelLogin:OnShow()
+function PanelLoginItem:OnShow()
     
 end
 
-function PanelLogin:OnHide()
+function PanelLoginItem:OnHide()
 
 end
 

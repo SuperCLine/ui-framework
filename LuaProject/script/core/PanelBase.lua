@@ -16,6 +16,9 @@ function PanelBase:OnClose()
 
 end
 
+function PanelBase:PlayClickAudio(btn)
+    
+end
 
 function PanelBase:OnClick(btn)
 
@@ -54,6 +57,10 @@ function PanelBase:OnEnter(go)
 end
 
 function PanelBase:OnExit(go)
+
+end
+
+function PanelBase:OnLongPressStart(go)
 
 end
 
