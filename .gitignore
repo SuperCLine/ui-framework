@@ -61,4 +61,6 @@ crashlytics-build.properties
 # XLua generated file
 Assets/XLua/
 Assets/XLua.meta
+Assets/AssetStoreTools/
+Assets/AssetStoreTools.meta
 
