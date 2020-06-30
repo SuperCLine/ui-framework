@@ -45,6 +45,7 @@ namespace CAE.Core
         void OnUp(string prefabPath, GameObject go);
         void OnEnter(string prefabPath, GameObject go);
         void OnExit(string prefabPath, GameObject go);
+        void OnLongPressStart(string prefabPath, GameObject go);
         void OnLongPress(string prefabPath, GameObject go);
         void OnLongPressEnd(string prefabPath, GameObject go);
         void OnDragStart(string prefabPath, GameObject go, PointerEventData eventData);
@@ -73,6 +74,7 @@ namespace CAE.Core
         void OnUp(GameObject go);
         void OnEnter(GameObject go);
         void OnExit(GameObject go);
+        void OnLongPressStart(GameObject go);
         void OnLongPress(GameObject go);
         void OnLongPressEnd(GameObject go);
         void OnDragStart(GameObject go, PointerEventData eventData);

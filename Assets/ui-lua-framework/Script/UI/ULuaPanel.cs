@@ -85,6 +85,8 @@ namespace CAE.Core
         { LuaMgr.Instance.LuaPanelMgr.OnEnter(Prefab, go); }
         protected override void OnExit(GameObject go)
         { LuaMgr.Instance.LuaPanelMgr.OnExit(Prefab, go); }
+        protected override void OnLongPressStart(GameObject go)
+        { LuaMgr.Instance.LuaPanelMgr.OnLongPressStart(Prefab, go); }
         protected override void OnLongPress(GameObject go)
         { LuaMgr.Instance.LuaPanelMgr.OnLongPress(Prefab, go); }
         protected override void OnLongPressEnd(GameObject go)

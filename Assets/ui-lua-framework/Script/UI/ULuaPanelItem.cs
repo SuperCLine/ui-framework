@@ -115,6 +115,11 @@ namespace CAE.Core
             if (LuaPanelItem != null)
                 LuaPanelItem.OnExit(go);
         }
+        protected override void OnLongPressStart(GameObject go)
+        {
+            if (LuaPanelItem != null)
+                LuaPanelItem.OnLongPressStart(go);
+        }
         protected override void OnLongPress(GameObject go)
         {
             if (LuaPanelItem != null)
