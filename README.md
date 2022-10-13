@@ -9,6 +9,8 @@ The purpose of this project is to facilitate the implementation of independent g
 
 Contact [SuperCLine](https://supercline.com) - https://supercline.com
 
+Recommended: [UGUI Super ScrollView](https://assetstore.unity.com/packages/tools/gui/ugui-super-scrollview-86572)
+
 # using
 
 - **git clone https://github.com/SuperCLine/ui-framework.git**
